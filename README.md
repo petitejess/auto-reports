@@ -8,4 +8,4 @@ Converting stand alone python scripts to automate report generation...
 
 Coming soon... 🙌
 
-My python app report generator is coming soon, so I can procrastinate at work. Soon. 🤭
+My python app report generator is coming soon, so I automate more stuff! Soon. 🤭
