@@ -1,6 +1,7 @@
 import os
 import shutil
 import openpyxl
+import pandas as pd
 
 from configs.dirconfigenum import DirPath
 from configs.reporttypeenum import ReportType
@@ -18,8 +19,12 @@ def get_price(price_str):
         return 0.0
 
 
-def get_template(report_type, company):
-    if report_type and company:
+def get_eom_date(date):
+    return date.replace(day=1, month=date.month + 1) - pd.DateOffset(days=1)
+
+
+def get_template(report_type, company=None):
+    if report_type:
         match report_type:
             case ReportType.ORDERS.value:
                 return openpyxl.load_workbook(DirPath.ORDER_TEMPLATE.value.format(company=company.lower()))

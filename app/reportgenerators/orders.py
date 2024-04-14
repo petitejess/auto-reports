@@ -5,7 +5,7 @@ import re
 from configs.companynameenum import CompanyName
 from configs.dirconfigenum import DirPath
 from configs.reporttypeenum import ReportType
-from utils.commonutil import get_company, get_price, get_template, move_to_archive
+from utils.commonutil import get_company, get_eom_date, get_price, get_template, move_to_archive
 
 
 def generate_orders():
@@ -37,7 +37,7 @@ def generate_orders():
         if date.day <= 15:
             return f'1-15 {date.strftime("%B %Y")}'
         else:
-            last_day_of_month = date.replace(day=1, month=date.month + 1) - pd.DateOffset(days=1)
+            last_day_of_month = get_eom_date(date)
             return f'16-{last_day_of_month.day} {date.strftime("%B %Y")}'
 
     def get_store(lastname, code):
