@@ -22,8 +22,8 @@ def generate_orders():
 
     file_config = read_config(DirPath.ORDER_FILE.value)
     lookup_config = read_config(DirPath.ORDER_LOOKUP.value)
+    file_input = DirPath.IN_MYOB.value
 
-    file_input = file_config['myob']['file']
     input_delimiter = file_config['myob']['delimiter']
     input_header = file_config['myob']['header']
     sheetname = file_config['excel']['orders']['sheetname']
