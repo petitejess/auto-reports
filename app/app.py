@@ -5,7 +5,7 @@ from reportgenerators.orders import generate_orders
 from reportgenerators.eoms import generate_eoms
 
 
-def main(report = None):
+def main(report=None):
     if report:
         match report:
             case ReportType.ORDERS.value:

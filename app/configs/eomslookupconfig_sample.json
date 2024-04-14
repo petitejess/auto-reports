@@ -3,6 +3,7 @@
     "template": {
       "start_row": 15,
       "end_row": 55,
+      "date_loc": "H10",
       "date": "A",
       "invoice": "B",
       "customer": "C",
