@@ -1,0 +1,21 @@
+{
+  "dirpath": {
+    "base": "/workspaces/auto-reports/app/",
+    "config": {
+      "dir": "configs/",
+      "company": "companyconfig.json",
+      "order_file": "inputfileconfig.json",
+      "order_lookup": "orderslookupconfig.json"
+    },
+    "input": {
+      "dir": "inputdir/",
+      "myob": "ITEMSALE.TXT"
+    },
+    "output": {
+      "dir": "outputdir/",
+      "archivedir": "archive/",
+      "orderdir": "orders/",
+      "eomsdir": "eoms/"
+    }
+  }
+}

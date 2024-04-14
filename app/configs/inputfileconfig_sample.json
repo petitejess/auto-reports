@@ -1,0 +1,20 @@
+{
+  "myob": {
+    "delimiter": "\t",
+    "header": 1
+  },
+  "excel": {
+    "orders": {
+      "sheetname": "Sheet1",
+      "company_col": "Co./Last Name",
+      "fhc_code": "FHC",
+      "title_web": "Every Beauty Company          The One Stop Shop for all your Beauty Needs",
+      "title_contact": "TEL: 123-B-E-AUTY  EMAIL: beauty@company.ebc"
+    },
+    "eoms": {
+      "sheetname": "Sheet1",
+      "company_col": "Co./Last Name",
+      "current_date_loc": "H10"
+    }
+  }
+}
