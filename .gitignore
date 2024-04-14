@@ -168,4 +168,8 @@ dependabot.yml
 /app/configs/orderslookupconfig.json
 /app/configs/eomslookupconfig.json
 /app/configs/inputfileconfig.json
+/app/inputdir/ITEMSALE.TXT
 /app/templates/eoms/eoms_template.xlsx
+/app/outputdir/archive/*
+/app/outputdir/eoms/*
+/app/outputdir/orders/*

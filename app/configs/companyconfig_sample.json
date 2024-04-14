@@ -1,0 +1,20 @@
+{
+  "companies": {
+    "ABC": {
+      "code": "abc",
+      "name": "A Beauty Company"
+    },
+    "SEA": {
+      "code": "sea",
+      "name": "South East Asia Beauty"
+    },
+    "ULT": {
+      "code": "ult",
+      "name": "Ultimate Beauty"
+    },
+    "XYZ": {
+      "code": "xyz",
+      "name": "XYZ Beauty"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "lookup": {
+    "template": {
+      "start_row": 15,
+      "end_row": 55,
+      "date": "A",
+      "invoice": "B",
+      "customer": "C",
+      "charges": "G",
+      "balance": "H"
+    }
+  }
+}
