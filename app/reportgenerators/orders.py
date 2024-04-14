@@ -6,13 +6,14 @@ import re
 from openpyxl.styles import numbers
 
 from configs.companynameenum import CompanyName
+from configs.dirconfigenum import DirPath
 from configs.reporttypeenum import ReportType
 from utils.commonutil import get_company, get_price, get_template 
 
 
-def generate_orders(company_name):
+def generate_orders():
     print(f'o(^^o)')
-    print(f'(o^^)o ~~ Generating order summary report for {company_name}...')
+    print(f'(o^^)o ~~ Generating order summary report...')
     print(f'o(^^o)')
 
     avail_companies = [CompanyName.SEA, CompanyName.LOR, CompanyName.ULT]
@@ -22,8 +23,8 @@ def generate_orders(company_name):
             config = json.load(file)
         return config
 
-    file_config = read_config('/workspaces/auto-reports/app/configs/inputfileconfig.json')
-    lookup_config = read_config('/workspaces/auto-reports/app/configs/orderslookupconfig.json')
+    file_config = read_config(DirPath.ORDER_FILE.value)
+    lookup_config = read_config(DirPath.ORDER_LOOKUP.value)
 
     file_input = file_config['myob']['file']
     input_delimiter = file_config['myob']['delimiter']
@@ -44,8 +45,8 @@ def generate_orders(company_name):
             return f'16-{last_day_of_month.day} {date.strftime("%B %Y")}'
 
 
-    def get_store(lastname, company):
-        match = re.search(lookup[company]["store_pattern"], lastname)
+    def get_store(lastname, code):
+        match = re.search(lookup[code]["store_pattern"], lastname)
         if match:
             return match.group(1)
 
@@ -53,8 +54,6 @@ def generate_orders(company_name):
 
 
     df = pd.read_table(file_input,delimiter=input_delimiter,header=input_header)
-
-    print(df)
 
 
     # Data prep
@@ -64,15 +63,15 @@ def generate_orders(company_name):
 
 
     # Metadata
-    company = get_company(company_df.iloc[0][company_col], avail_companies)
-    template = get_template(ReportType.ORDERS.value, company)
+    [code, company] = get_company(company_df.iloc[0][company_col], avail_companies)
+    template = get_template(ReportType.ORDERS.value, code)
     sheet = template[sheetname]
 
 
     # Date format, period, stores
     company_df["Date"] = pd.to_datetime(company_df["Date"], format="%d/%m/%Y")
     company_df["Period"] = company_df["Date"].apply(get_period)
-    company_df["Store"] = company_df["Co./Last Name"].apply(lambda row: get_store(row, company))
+    company_df["Store"] = company_df["Co./Last Name"].apply(lambda row: get_store(row, code))
 
 
     # Populate template
@@ -81,30 +80,27 @@ def generate_orders(company_name):
 
     # display(pivot_df)
 
-    template_item_codes = set(sheet[f'{lookup[company]["template_code"]["col"]}{row}'].value for row in range(lookup[company]["template_code"]["start_row"], lookup[company]["template_code"]["end_row"] + 1))
+    template_item_codes = set(sheet[f'{lookup[code]["template_code"]["col"]}{row}'].value for row in range(lookup[code]["template_code"]["start_row"], lookup[code]["template_code"]["end_row"] + 1))
     new_item_codes = set(company_df['Item Number'].unique()) - template_item_codes
 
     # -- Append new items found to template
-    for idx, new_item_code in enumerate(new_item_codes, start=lookup[company]["template_code"]["end_row"] + 1):
-        sheet[f'{lookup[company]["template_code"]["col"]}{idx}'] = new_item_code
-        sheet[f'{lookup[company]["template_item"]["col"]}{idx}'] = company_df[company_df['Item Number'] == new_item_code]['Description'].values[0]
-        sheet[f'{lookup[company]["template_price"]["col"]}{idx}'] = get_price(company_df[company_df['Item Number'] == new_item_code]['Price'].values[0])
+    for idx, new_item_code in enumerate(new_item_codes, start=lookup[code]["template_code"]["end_row"] + 1):
+        sheet[f'{lookup[code]["template_code"]["col"]}{idx}'] = new_item_code
+        sheet[f'{lookup[code]["template_item"]["col"]}{idx}'] = company_df[company_df['Item Number'] == new_item_code]['Description'].values[0]
+        sheet[f'{lookup[code]["template_price"]["col"]}{idx}'] = get_price(company_df[company_df['Item Number'] == new_item_code]['Price'].values[0])
 
     # -- Write dates invoice, row, stores rows
-    # sheet[f'{lookup[company]["template_date"]["col"]}{lookup[company]["template_date"]["start_row"]}'] = 'Date'
-    # sheet[f'{lookup[company]["template_date"]["col"]}{lookup[company]["template_date"]["start_row"] + 1}'] = 'Store'
-    # sheet[f'{lookup[company]["template_date"]["col"]}{lookup[company]["template_extra"]["end_row"] + 5}'] = 'Invoice No.'
-    for col_num, (invoice, store, date) in enumerate(pivot_df.columns, start=lookup[company]["template_date"]["start_row"]):
-        sheet.cell(row=lookup[company]["template_date"]["start_row"], column=col_num, value=date)
-        sheet.cell(row=lookup[company]["template_date"]["start_row"] + 1, column=col_num, value=store)
-        sheet.cell(row=lookup[company]["template_extra"]["end_row"] + 5, column=col_num, value=invoice)
+    for col_num, (invoice, store, date) in enumerate(pivot_df.columns, start=lookup[code]["template_date"]["start_row"]):
+        sheet.cell(row=lookup[code]["template_date"]["start_row"], column=col_num, value=date)
+        sheet.cell(row=lookup[code]["template_date"]["start_row"] + 1, column=col_num, value=store)
+        sheet.cell(row=lookup[code]["template_extra"]["end_row"] + 5, column=col_num, value=invoice)
 
     # -- Fill in quantities
-    for row_num, code_row in enumerate(range(lookup[company]["template_code"]["start_row"], lookup[company]["template_extra"]["end_row"] + 1), start=lookup[company]["template_code"]["start_row"]):
-        item_code_val = sheet[f'{lookup[company]["template_code"]["col"]}{code_row}'].value
+    for row_num, code_row in enumerate(range(lookup[code]["template_code"]["start_row"], lookup[code]["template_extra"]["end_row"] + 1), start=lookup[code]["template_code"]["start_row"]):
+        item_code_val = sheet[f'{lookup[code]["template_code"]["col"]}{code_row}'].value
         
         if item_code_val in pivot_df.index:
-            for col_num, (invoice, store, date) in enumerate(pivot_df.columns, start=lookup[company]["template_date"]["start_row"]):
+            for col_num, (invoice, store, date) in enumerate(pivot_df.columns, start=lookup[code]["template_date"]["start_row"]):
                 if item_code_val == fhc_code:
                     # Special case for FHC
                     price_entry = company_df[(company_df['Item Number'] == fhc_code) & (company_df['Store'] == store) & (company_df['Date'] == date)]
@@ -131,8 +127,8 @@ def generate_orders(company_name):
     sheet.cell(row=3, column=2, value=title_web)
     sheet.cell(row=4, column=2, value=title_contact)
 
-    new_filename = f'{company.title()}_All_Stores_{"_".join(period.split(" "))}.xlsx'
-    output_path = f'./outputdir/{new_filename}'
+    new_filename = f'{company.title().replace(" ", "_")}_All_Stores_{period.replace(" ", "_")}.xlsx'
+    output_path = f'{DirPath.OUT_ORDER.value}{new_filename}'
     template.save(output_path)
 
     print(f'Data saved to {output_path}')

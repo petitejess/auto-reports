@@ -4,7 +4,7 @@ from configs.reporttypeenum import ReportType
 
 
 def get_company(rec, avail_companies):
-    return next(n for (c, n) in avail_companies if n in rec.lower())
+    return next([c, n] for (c, n) in avail_companies if n.lower() in rec.lower())
 
 
 def get_price(price_str):
