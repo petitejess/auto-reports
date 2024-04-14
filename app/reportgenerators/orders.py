@@ -1,14 +1,11 @@
 import json
 import pandas as pd
-import openpyxl
-import shutil
 import re
-from openpyxl.styles import numbers
 
 from configs.companynameenum import CompanyName
 from configs.dirconfigenum import DirPath
 from configs.reporttypeenum import ReportType
-from utils.commonutil import get_company, get_price, get_template 
+from utils.commonutil import get_company, get_price, get_template, move_to_archive 
 
 
 def generate_orders():
@@ -127,8 +124,16 @@ def generate_orders():
     sheet.cell(row=3, column=2, value=title_web)
     sheet.cell(row=4, column=2, value=title_contact)
 
-    new_filename = f'{company.title().replace(" ", "_")}_All_Stores_{period.replace(" ", "_")}.xlsx'
-    output_path = f'{DirPath.OUT_ORDER.value}{new_filename}'
+    new_filename = f'{company.title().replace(" ", "_")}_All_Stores_{period.replace(" ", "_")}'
+    output_path = f'{DirPath.OUT_ORDER.value}{new_filename}' + ".xlsx"
+
+
+    # Move to archive if file already exists
+    archive_destination = f'{DirPath.OUT_ARCHIVE.value}{new_filename}'
+    move_to_archive(output_path, archive_destination, ".xlsx")
+
+
+    # Save the file
     template.save(output_path)
 
     print(f'Data saved to {output_path}')

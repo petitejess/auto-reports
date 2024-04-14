@@ -1,3 +1,5 @@
+import os
+import shutil
 import openpyxl
 
 from configs.reporttypeenum import ReportType
@@ -22,3 +24,18 @@ def get_template(report_type, company):
                 return openpyxl.load_workbook(f'./templates/orders/{company.lower()}_orders_template.xlsx')
             case ReportType.EOMS.value:
                 return openpyxl.load_workbook(f'./templates/eoms/eoms_template.xlsx')
+
+
+def move_to_archive(output_path, archive_destination, file_ext):
+    if os.path.exists(output_path):
+        sequence = 1
+        new_archive_path = f'{archive_destination} ({sequence}){file_ext}'
+
+        # Rename file with sequence number
+        while os.path.exists(new_archive_path):
+            sequence += 1
+            new_archive_path = f'{archive_destination} ({sequence}){file_ext}'
+
+        # Move existing file to archive
+        shutil.move(output_path, new_archive_path)
+        print(f'Existing file moved to {new_archive_path}')

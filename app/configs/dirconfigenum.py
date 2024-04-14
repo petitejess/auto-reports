@@ -20,5 +20,6 @@ class DirPath(Enum):
     IN_MYOB = in_basedir + BaseDirPath.input["myob"]
 
     out_basedir = "./" +BaseDirPath.output["dir"]
+    OUT_ARCHIVE = out_basedir + BaseDirPath.output["archivedir"]
     OUT_ORDER = out_basedir + BaseDirPath.output["orderdir"]
     OUT_EOMS = out_basedir + BaseDirPath.output["eomsdir"]
