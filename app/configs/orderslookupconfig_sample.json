@@ -1,5 +1,32 @@
 {
   "lookup": {
+    "lor": {
+      "store_pattern": "re.compile(r'lore\\s+of\\s+beauty/(.*)', re.IGNORECASE)",
+      "template_code": {
+        "col": "A",
+        "start_row": 9,
+        "end_row": 41
+      },
+      "template_item": {
+        "col": "B"
+      },
+      "template_price": {
+        "col": "E"
+      },
+      "template_date": {
+        "col": "F",
+        "start_row": 6
+      },
+      "template_fhc": {
+        "col": "F",
+        "start_row": 41
+      },
+      "template_extra": {
+        "col": "A",
+        "start_row": 42,
+        "end_row": 61
+      }
+    },
     "sea": {
       "store_pattern": "re.compile(r'south\\s+east\\s+asia\\s+beauty/(.*)', re.IGNORECASE)",
       "template_code": {

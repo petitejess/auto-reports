@@ -4,6 +4,10 @@
       "code": "abc",
       "name": "A Beauty Company"
     },
+    "LOR": {
+      "code": "lor",
+      "name": "Lore of Beauty"
+    },
     "SEA": {
       "code": "sea",
       "name": "South East Asia Beauty"
