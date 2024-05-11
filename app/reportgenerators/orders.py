@@ -1,10 +1,10 @@
-import json
 import pandas as pd
 import re
 
-from configs.companynameenum import CompanyName
-from configs.dirconfigenum import DirPath
-from configs.reporttypeenum import ReportType
+from app.utils.dirutil import read_config
+from enums.companynameenum import CompanyName
+from enums.dirconfigenum import DirPath
+from enums.reporttypeenum import ReportType
 from utils.commonutil import get_company, get_eom_date, get_price, get_template, move_to_archive
 
 
@@ -15,14 +15,9 @@ def generate_orders():
 
     avail_companies = [CompanyName.SEA, CompanyName.LOR, CompanyName.ULT]
 
-    def read_config(file_path):
-        with open(file_path, "r") as file:
-            config = json.load(file)
-        return config
-
-    file_config = read_config(DirPath.ORDER_FILE.value)
-    lookup_config = read_config(DirPath.ORDER_LOOKUP.value)
-    file_input = DirPath.IN_MYOB.value
+    file_config = read_config(DirPath.INCONF.value)
+    lookup_config = read_config(DirPath.ORDERLOOKUP.value)
+    file_input = DirPath.IN_ORDER.value
 
     input_delimiter = file_config["myob"]["delimiter"]
     input_header = file_config["myob"]["header"]
@@ -138,7 +133,7 @@ def generate_orders():
     output_path = f"{DirPath.OUT_ORDER.value}{new_filename}" + ".xlsx"
 
     # Move to archive if file already exists
-    archive_destination = f"{DirPath.OUT_ARCHIVE.value}{new_filename}"
+    archive_destination = f"{DirPath.OUT_ORDER_ARCHIVE.value}{new_filename}"
     move_to_archive(output_path, archive_destination, ".xlsx")
 
     # Save the file

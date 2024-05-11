@@ -2,9 +2,10 @@ from datetime import datetime
 import json
 
 import pandas as pd
-from configs.companynameenum import CompanyName
-from configs.dirconfigenum import DirPath
-from configs.reporttypeenum import ReportType
+from app.utils.dirutil import read_config
+from enums.companynameenum import CompanyName
+from enums.dirconfigenum import DirPath
+from enums.reporttypeenum import ReportType
 from utils.commonutil import get_eom_date, get_price, get_template, move_to_archive
 
 
@@ -31,14 +32,9 @@ def generate_eoms():
         CompanyName.ULT,
     ]
 
-    def read_config(file_path):
-        with open(file_path, "r") as file:
-            config = json.load(file)
-        return config
-
-    file_config = read_config(DirPath.ORDER_FILE.value)
+    file_config = read_config(DirPath.INCONF.value)
     lookup_config = read_config(DirPath.EOMS_LOOKUP.value)
-    file_input = DirPath.IN_MYOB.value
+    file_input = DirPath.IN_EOMS.value
 
     input_delimiter = file_config["myob"]["delimiter"]
     input_header = file_config["myob"]["header"]
@@ -119,7 +115,7 @@ def generate_eoms():
             output_path = f"{DirPath.OUT_EOMS.value}{new_filename}" + ".xlsx"
 
             # Move to archive if file already exists
-            archive_destination = f"{DirPath.OUT_ARCHIVE.value}{new_filename}"
+            archive_destination = f"{DirPath.OUT_EOMS_ARCHIVE.value}{new_filename}"
             move_to_archive(output_path, archive_destination, ".xlsx")
 
             # Save the file

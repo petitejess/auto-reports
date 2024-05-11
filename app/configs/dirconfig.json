@@ -1,27 +1,20 @@
 {
-  "dirpath": {
-    "base": "/workspaces/auto-reports/app/",
-    "config": {
-      "dir": "configs/",
-      "company": "companyconfig.json",
-      "order_file": "inputfileconfig.json",
-      "order_lookup": "orderslookupconfig.json",
-      "eoms_lookup": "eomslookupconfig.json"
-    },
-    "input": {
-      "dir": "inputdir/",
-      "myob": "ITEMSALE.TXT"
-    },
-    "template": {
-      "dir": "templates/",
-      "order": "orders/{company}_orders_template.xlsx",
-      "eoms": "eoms/eoms_template.xlsx"
-    },
-    "output": {
-      "dir": "outputdir/",
-      "archivedir": "archive/",
-      "orderdir": "orders/",
-      "eomsdir": "eoms/"
-    }
+  "toppath": {
+    "configs": "configs/",
+    "inputs": "inputdir/",
+    "outputs": "ouputdir/",
+    "archive": "archive/",
+    "templates": "templates/"
+  },
+  "endpath": {
+    "orders": "orders/",
+    "eoms": "eoms/"
+  },
+  "filename": {
+    "company": "companyconfig.json",
+    "inconf": "inputfileconfig.json",
+    "orderlookup": "orderslookupconfig.json",
+    "eomslookup": "eomslookupconfig.json",
+    "myob": "ITEMSALE.TXT"
   }
 }

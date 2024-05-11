@@ -3,8 +3,8 @@ import shutil
 import openpyxl
 import pandas as pd
 
-from configs.dirconfigenum import DirPath
-from configs.reporttypeenum import ReportType
+from app.enums.dirconfigenum import DirPath
+from app.enums.reporttypeenum import ReportType
 
 
 def get_company(rec, avail_companies):

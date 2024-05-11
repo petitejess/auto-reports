@@ -1,7 +1,7 @@
 import json
 from enum import Enum
 
-from configs.dirconfigenum import DirPath
+from app.enums.dirconfigenum import DirPath
 
 class CompanyName(Enum):
     pass
